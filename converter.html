@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konverter HEIC ke JPG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 32px;
+            font-size: 1rem;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+            background: #f9fafb;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f3f1ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #f3f1ff;
+            transform: scale(1.02);
+        }
+
+        .upload-area svg {
+            width: 48px;
+            height: 48px;
+            color: #667eea;
+            margin-bottom: 12px;
+        }
+
+        .upload-area p {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .upload-area .hint {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .file-list {
+            margin-top: 24px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .file-name {
+            color: #333;
+            flex: 1;
+            word-break: break-all;
+        }
+
+        .file-status {
+            margin-left: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-converting {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-done {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .progress {
+            width: 100%;
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            color: #856404;
+            font-size: 0.95rem;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            color: #155724;
+            font-size: 0.95rem;
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            margin-top: 32px;
+        }
+
+        .options {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .option {
+            margin-bottom: 12px;
+        }
+
+        .option label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .option input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .option-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-left: 24px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .upload-area {
+                padding: 30px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Konverter HEIC ke JPG</h1>
+        <p class="subtitle">Konversi file foto HEIC ke JPG untuk website Anda</p>
+
+        <div class="info-box">
+            ℹ️ <strong>Info:</strong> Konversi dilakukan di browser Anda. File tidak akan dikirim ke server manapun.
+        </div>
+
+        <div class="warning" id="warningMessage" style="display: none;">
+            ⚠️ <strong>Perhatian:</strong> Browser Anda mungkin tidak mendukung konversi HEIC. Hasil konversi mungkin kurang sempurna.
+        </div>
+
+        <div>
+            <div class="upload-area" id="uploadArea">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 18C3.13 18 0 14.87 0 11c0-3.53 2.61-6.43 6-6.92C6.48 2.34 8.53 0.91 11 0.91c2.26 0 4.25 1.12 5.47 2.84C17.57 3.5 20 5.82 20 8.9c0 .5-.04 1-.12 1.48C21.1 10.98 23 13.28 23 16c0 3.59-2.9 6.5-6.5 6.5H7z" fill="currentColor" opacity="0.5"/>
+                    <path d="M12 19V10M12 10L7 15M12 10L17 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <p><strong>Klik atau drag file HEIC ke sini</strong></p>
+                <p class="hint">Mendukung file HEIC, HEIF, JPG, PNG</p>
+            </div>
+            <input type="file" id="fileInput" multiple accept=".heic,.heif,.jpg,.jpeg,.png,.webp" />
+        </div>
+
+        <div class="options">
+            <div class="option">
+                <label>
+                    <input type="checkbox" id="autoDownload" checked />
+                    <span>Unduh otomatis setelah konversi</span>
+                </label>
+                <div class="option-desc">File akan otomatis diunduh saat selesai</div>
+            </div>
+            <div class="option">
+                <label>
+                    <input type="checkbox" id="quality" checked />
+                    <span>Kualitas tinggi (file lebih besar)</span>
+                </label>
+                <div class="option-desc">Kualitas: 95% vs Normal: 80%</div>
+            </div>
+        </div>
+
+        <button class="btn" id="convertBtn" style="display: none;">Mulai Konversi</button>
+
+        <div class="file-list" id="fileList"></div>
+
+        <div id="successMessage" class="success" style="display: none;">
+            ✓ Semua file berhasil dikonversi! Anda bisa mendownload filenya sekarang.
+        </div>
+
+        <div class="section-title" style="margin-top: 48px;">Langkah Berikutnya</div>
+        <div class="info-box">
+            <strong>Setelah konversi:</strong>
+            <ol style="margin-left: 20px; margin-top: 10px; color: #333;">
+                <li>Buat folder "foto" jika belum ada</li>
+                <li>Pindahkan semua file JPG hasil konversi ke folder "foto"</li>
+                <li>Buka file "UntukKesayanganAku.html" di browser</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const convertBtn = document.getElementById('convertBtn');
+        const fileList = document.getElementById('fileList');
+        const autoDownload = document.getElementById('autoDownload');
+        const qualityCheckbox = document.getElementById('quality');
+        const warningMessage = document.getElementById('warningMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        let selectedFiles = [];
+
+        // Check browser support
+        function checkSupport() {
+            if (typeof heic2any === 'undefined') {
+                warningMessage.style.display = 'block';
+            }
+        }
+
+        // File upload handlers
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files);
+            handleFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            handleFiles(files);
+        });
+
+        function handleFiles(files) {
+            selectedFiles = files.filter(f => {
+                const ext = f.name.split('.').pop().toLowerCase();
+                return ['heic', 'heif', 'jpg', 'jpeg', 'png', 'webp'].includes(ext);
+            });
+
+            renderFileList();
+            convertBtn.style.display = selectedFiles.length > 0 ? 'block' : 'none';
+        }
+
+        function renderFileList() {
+            fileList.innerHTML = '';
+            successMessage.style.display = 'none';
+
+            selectedFiles.forEach((file, index) => {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                div.innerHTML = `
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-status status-pending">Pending</span>
+                `;
+                fileList.appendChild(div);
+            });
+        }
+
+        convertBtn.addEventListener('click', async () => {
+            convertBtn.disabled = true;
+            let successCount = 0;
+
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
+                const fileItem = fileList.children[i];
+                const statusBadge = fileItem.querySelector('.file-status');
+
+                try {
+                    statusBadge.textContent = 'Converting...';
+                    statusBadge.className = 'file-status status-converting';
+
+                    let blob = file;
+                    const ext = file.name.split('.').pop().toLowerCase();
+
+                    if (['heic', 'heif'].includes(ext)) {
+                        if (typeof heic2any === 'undefined') {
+                            throw new Error('Browser tidak mendukung konversi HEIC');
+                        }
+                        blob = await heic2any({ blob: file });
+                    }
+
+                    // Convert to canvas and download
+                    const img = new Image();
+                    const reader = new FileReader();
+
+                    reader.onload = async (e) => {
+                        img.onload = async () => {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0);
+
+                            canvas.toBlob((jpegBlob) => {
+                                const newFileName = file.name.replace(/\.[^.]+$/, '.jpg');
+
+                                statusBadge.textContent = 'Done';
+                                statusBadge.className = 'file-status status-done';
+                                successCount++;
+
+                                if (autoDownload.checked) {
+                                    const url = URL.createObjectURL(jpegBlob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = newFileName;
+                                    a.click();
+                                    URL.revokeObjectURL(url);
+                                }
+
+                                if (successCount === selectedFiles.length) {
+                                    convertBtn.disabled = false;
+                                    successMessage.style.display = 'block';
+                                }
+                            }, 'image/jpeg', qualityCheckbox.checked ? 0.95 : 0.8);
+                        };
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(blob);
+
+                } catch (error) {
+                    statusBadge.textContent = 'Error';
+                    statusBadge.className = 'file-status status-error';
+                    console.error(`Error converting ${file.name}:`, error);
+
+                    if (i === selectedFiles.length - 1 && successCount > 0) {
+                        convertBtn.disabled = false;
+                    }
+                }
+            }
+        });
+
+        checkSupport();
+    </script>
+</body>
+</html>

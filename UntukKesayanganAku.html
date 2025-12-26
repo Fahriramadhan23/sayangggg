@@ -1,0 +1,981 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sayangggkuu maaf yahhh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background pattern */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 20%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 520px;
+            width: 100%;
+            background-color: #2a2a2a;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #404040;
+        }
+
+        /* Decorative corner accents */
+        .container::before, .container::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #555555 0%, #444444 100%);
+            opacity: 0.1;
+            z-index: 0;
+            border-radius: 50%;
+        }
+
+        .container::before {
+            top: -30px;
+            left: -30px;
+        }
+
+        .container::after {
+            bottom: -30px;
+            right: -30px;
+        }
+
+        .header {
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header h1 span {
+            color: #ffffff;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #cccccc;
+            font-weight: 400;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background-color: #666666;
+            opacity: 0.5;
+        }
+
+        .message-container {
+            background-color: #333333;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+            border-left: 4px solid #666666;
+            position: relative;
+            z-index: 1;
+        }
+
+        .message-container p {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            line-height: 1.7;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 160px;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background-color: #ffffff;
+            color: #000000;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-primary:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 255, 255, 0.35);
+        }
+
+        .btn-secondary {
+            background-color: #333333;
+            color: #ffffff;
+            border: 1.5px solid #555555;
+        }
+
+        .btn-secondary:hover {
+            background-color: #404040;
+            border-color: #666666;
+            transform: translateY(-2px);
+        }
+
+        .hidden-message-container {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.8s ease;
+            margin-top: 0;
+            background-color: #333333;
+            border-radius: 12px;
+            padding: 0 28px;
+        }
+
+        .hidden-message-container.show {
+            max-height: 60vh;
+            opacity: 1;
+            margin-top: 16px;
+            padding: 20px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .hidden-message {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #e0e0e0;
+            text-align: justify;
+            white-space: pre-wrap;
+            position: relative;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2rem;
+            background-color: #ffffff;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: #cccccc;
+            text-align: right;
+            margin-top: 24px;
+            font-weight: 600;
+        }
+
+        .music-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            color: #cccccc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 100;
+        }
+
+        .music-indicator .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            animation: pulse 2s infinite;
+        }
+
+        .footer {
+            margin-top: 16px;
+            font-size: 0.85rem;
+            color: #888888;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animations */
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.5; transform: scale(1); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 28px 20px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .message-container {
+                padding: 20px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .hidden-message {
+                font-size: 1rem;
+            }
+
+            .hidden-message-container.show {
+                max-height: 50vh;
+            }
+
+            .music-indicator {
+                bottom: 15px;
+                right: 15px;
+                font-size: 0.8rem;
+            }
+
+            /* Gallery responsive for mobile */
+            .gallery-container {
+                padding: 20px;
+                min-height: 100vh;
+            }
+
+            .gallery-content {
+                width: 95%;
+                max-width: 100%;
+                height: auto;
+                max-height: none;
+                min-height: 60vh;
+            }
+
+            .photocard {
+                max-height: calc(100vh - 280px);
+                min-height: 350px;
+                aspect-ratio: auto;
+                width: 100%;
+            }
+
+            .gallery-controls {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                margin-top: 16px;
+                gap: 12px;
+                width: 100%;
+            }
+
+            .gallery-btn {
+                padding: 12px 16px;
+                font-size: 0.8rem;
+                width: 100%;
+            }
+
+            .gallery-counter {
+                grid-column: 1 / -1;
+                font-size: 0.9rem;
+                padding: 8px 0;
+            }
+
+            .gallery-nav {
+                gap: 6px;
+                margin-top: 12px;
+            }
+
+            .gallery-close {
+                width: 100%;
+                margin-top: 12px;
+                padding: 12px 16px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .btn, .hidden-message-container, .typing-cursor, .dot {
+                transition: none;
+                animation: none;
+            }
+        }
+
+        /* Gallery Styles */
+        .gallery-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            animation: fadeInUp 0.5s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .gallery-container.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .gallery-content {
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .photocard {
+            width: 100%;
+            aspect-ratio: 3/4;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(255, 255, 255, 0.1);
+            background-color: #2a2a2a;
+            overflow: hidden;
+            animation: scaleIn 0.5s ease;
+        }
+
+        .photocard img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photocard.loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #333333 0%, #2a2a2a 100%);
+        }
+
+        .photocard.loading::after {
+            content: '';
+            width: 40px;
+            height: 40px;
+            border: 3px solid #666;
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .gallery-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            gap: 16px;
+        }
+
+        .gallery-btn {
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .gallery-btn:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .gallery-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .gallery-close {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-close:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .gallery-counter {
+            color: #cccccc;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .gallery-nav {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .gallery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-dot.active {
+            background-color: #ffffff;
+            transform: scale(1.3);
+        }
+
+        .next-btn {
+            display: none;
+            margin-top: 12px;
+        }
+
+        .next-btn.show {
+            display: flex;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .next-btn.show.delayed-show {
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Untuk <span>kamuuu</span></h1>
+            <div class="subtitle">Sebuah permohonan maaf terdalam dari aku buat kamu</div>
+        </div>
+
+        <div class="message-container">
+            <p>I take full responsibility for my mistakes. I am truly sorry, and I am committed to becoming a better person.</p>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-primary" id="showMessageBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7117 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0034 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92176 4.44061 8.37485 5.27072 7.03255C6.10083 5.69025 7.28825 4.60557 8.7 3.9C9.87812 3.30493 11.1801 2.99656 12.5 3H13C15.0843 3.11499 17.053 3.99476 18.5291 5.47086C20.0052 6.94696 20.885 8.91565 21 11V11.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Send a Hug
+            </button>
+            <button class="btn btn-secondary" id="copyMessageBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 5H6C5.46957 5 4.96086 5.21071 4.58579 5.58579C4.21071 5.96086 4 6.46957 4 7V19C4 19.5304 4.21071 20.0391 4.58579 20.4142C4.96086 20.7893 5.46957 21 6 21H16C16.5304 21 17.0391 20.7893 17.4142 20.4142C17.7893 20.0391 18 19.5304 18 19V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 5C8 4.46957 8.21071 3.96086 8.58579 3.58579C8.96086 3.21071 9.46957 3 10 3H14C14.5304 3 15.0391 3.21071 15.4142 3.58579C15.7893 3.96086 16 4.46957 16 5C16 5.53043 15.7893 6.03914 15.4142 6.41421C15.0391 6.78929 14.5304 7 14 7H10C9.46957 7 8.96086 6.78929 8.58579 6.41421C8.21071 6.03914 8 5.53043 8 5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 14H20C20.2652 14 20.5196 13.8946 20.7071 13.7071C20.8946 13.5196 21 13.2652 21 13C21 12.7348 20.8946 12.4804 20.7071 12.2929C20.5196 12.1054 20.2652 12 20 12H16C15.7348 12 15.4804 12.1054 15.2929 12.2929C15.1054 12.4804 15 12.7348 15 13C15 13.2652 15.1054 13.5196 15.2929 13.7071C15.4804 13.8946 15.7348 14 16 14Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 18H20C20.2652 18 20.5196 17.8946 20.7071 17.7071C20.8946 17.5196 21 17.2652 21 17C21 16.7348 20.8946 16.4804 20.7071 16.2929C20.5196 16.1054 20.2652 16 20 16H16C15.7348 16 15.4804 16.1054 15.2929 16.2929C15.1054 16.4804 15 16.7348 15 17C15 17.2652 15.1054 17.5196 15.2929 17.7071C15.4804 17.8946 15.7348 18 16 18Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Copy Message
+            </button>
+        </div>
+
+        <div class="hidden-message-container" id="hiddenMessageContainer">
+            <div class="hidden-message" id="hiddenMessage">
+                <span class="typing-cursor"></span>
+            </div>
+            <div class="signature">— [Kesayangan Rakaaa]</div>
+            
+            <button class="btn btn-primary next-btn" id="nextBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Next
+            </button>
+        </div>
+
+        <div class="footer">
+            <p>Made with. Fahri ramadhan "i love you" !</p>
+        </div>
+    </div>
+
+    <!-- Music indicator -->
+    <div class="music-indicator" id="musicIndicator">
+        <div class="dot"></div>
+        <span>Music is playing</span>
+    </div>
+
+    <!-- Audio element for background music -->
+    <audio id="backgroundMusic" autoplay loop>
+        <source src="thousand.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Gallery Container -->
+    <div class="gallery-container" id="galleryContainer">
+        <div class="gallery-content">
+            <div class="photocard" id="photocard">
+                <div class="loading"></div>
+            </div>
+            
+            <div class="gallery-controls">
+                <button class="gallery-btn" id="prevBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Previous
+                </button>
+                <div class="gallery-counter">
+                    <span id="currentPhoto">1</span> / <span id="totalPhotos">0</span>
+                </div>
+                <button class="gallery-btn" id="nextPhotoBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12H19M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Next
+                </button>
+            </div>
+            
+            <div class="gallery-nav" id="galleryNav"></div>
+            
+            <button class="gallery-close" id="closeGallery">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const showMessageBtn = document.getElementById('showMessageBtn');
+            const copyMessageBtn = document.getElementById('copyMessageBtn');
+            const hiddenMessageContainer = document.getElementById('hiddenMessageContainer');
+            const hiddenMessage = document.getElementById('hiddenMessage');
+            const musicIndicator = document.getElementById('musicIndicator');
+            const nextBtn = document.getElementById('nextBtn');
+            const galleryContainer = document.getElementById('galleryContainer');
+            const photocard = document.getElementById('photocard');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextPhotoBtn = document.getElementById('nextPhotoBtn');
+            const closeGallery = document.getElementById('closeGallery');
+            const currentPhotoSpan = document.getElementById('currentPhoto');
+            const totalPhotosSpan = document.getElementById('totalPhotos');
+            const galleryNav = document.getElementById('galleryNav');
+            
+            // Message to display with typewriter effect
+            const fullMessage = `sayangggg, sudah banyak kesalahan yang aku lakukan kepadamu dan ini yang paling fatal, maaf sudah menimbulkan kembali rasa sakit yang sudah dibuang jauh, aku sangat menyesal atas semua yang telah terjadi, aku benci sama diri aku sendiri terkait kesalahan yang sudah aku perbuat kepadamu.
+
+berulang kali minta maaff dan ikhlas yang kuharapkan dan kepercayaan kamu kembali untuk memberi harapan kembali dari atas dosa kesalahan yang aku perbuat, aku sangat nyesal banget yang dimana tidak boleh terjadi ke kamu.
+
+aku terus terang agar kamu yakin aku tetap pilihan kamu, bukan bayangan dari aku, tidak terlintas sedikitpun untuk mencari sesosok yang lain buat menggantikan dirimu, aku sangat sangattt sangat sayang banget ke kamuuu, aku nggak mau kita berjarak dan menjadi jauh kitanya, aku masih terus berusaha buat membangun harapan kita apa yang telah kita ceritakan kemarin untuk buat masa depan kita. i love you so muchhh more than you knowww adekkk sayangg cintakuuu.`;
+            
+            // Gallery data
+            let photos = [];
+            let currentPhotoIndex = 0;
+            
+            // Load photos from folder
+            function loadPhotos() {
+                const photoFiles = [
+                    'foto/2024_12_15_20_36_IMG_2951.HEIC',
+                    'foto/2024_12_26_20_19_IMG_3197.HEIC',
+                    'foto/2024_12_26_20_28_IMG_3205.HEIC',
+                    'foto/2024_12_26_20_28_IMG_3217.HEIC',
+                    'foto/2024_12_26_20_56_IMG_3207.HEIC',
+                    'foto/2024_12_26_20_56_IMG_3209.HEIC',
+                    'foto/2024_12_26_21_06_IMG_3214.HEIC',
+                    'foto/2024_12_28_11_29_IMG_3284.HEIC',
+                    'foto/2025_01_01_00_17_IMG_3325.HEIC',
+                    'foto/2025_01_01_00_18_IMG_3326.HEIC',
+                    'foto/2025_01_02_20_18_IMG_3397.JPG',
+                    'foto/2025_01_07_16_30_IMG_3422.JPG',
+                    'foto/2025_02_07_18_01_IMG_4090.HEIC',
+                    'foto/2025_02_07_18_47_IMG_3987.HEIC',
+                    'foto/2025_02_07_18_48_IMG_3994.HEIC',
+                    'foto/2025_02_07_18_49_IMG_4003.HEIC',
+                    'foto/2025_02_07_22_04_IMG_4013.HEIC',
+                    'foto/2025_02_08_14_09_IMG_4144.HEIC',
+                    'foto/2025_02_08_14_15_IMG_4151.HEIC',
+                    'foto/2025_02_08_14_15_IMG_4152.HEIC',
+                    'foto/2025_02_26_17_30_IMG_4388.HEIC',
+                    'foto/2025_03_11_20_04_IMG_4451.JPEG',
+                    'foto/2025_03_16_20_36_IMG_4486.HEIC',
+                    'foto/2025_03_16_21_45_IMG_4515.HEIC',
+                    'foto/2025_03_17_20_56_IMG_4532.HEIC',
+                    'foto/2025_03_17_21_01_IMG_4537.JPG',
+                    'foto/2025_04_06_21_36_IMG_4725.HEIC',
+                    'foto/2025_04_06_21_36_IMG_4728.HEIC',
+                    'foto/2025_04_06_21_37_IMG_4730.JPG',
+                    'foto/2025_05_21_12_40_IMG_6155.HEIC',
+                    'foto/2025_05_22_08_37_IMG_6143.JPG',
+                    'foto/2025_06_27_22_33_IMG_6707.HEIC',
+                    'foto/2025_06_27_22_36_IMG_6711.HEIC',
+                    'foto/2025_08_25_21_58_IMG_7861.HEIC',
+                    'foto/2025_08_25_22_00_IMG_7874.HEIC'
+                ];
+                
+                photos = photoFiles;
+                totalPhotosSpan.textContent = photos.length;
+                
+                // Create navigation dots
+                galleryNav.innerHTML = '';
+                photos.forEach((_, index) => {
+                    const dot = document.createElement('div');
+                    dot.className = 'gallery-dot' + (index === 0 ? ' active' : '');
+                    dot.addEventListener('click', () => goToPhoto(index));
+                    galleryNav.appendChild(dot);
+                });
+            }
+            
+            // Convert HEIC to Data URL
+            async function convertHEICtoDataURL(filePath) {
+                try {
+                    const response = await fetch(filePath);
+                    const blob = await response.blob();
+                    
+                    // Check if it's HEIC
+                    if (blob.type === 'image/heic' || blob.type === 'image/heif' || filePath.toLowerCase().endsWith('.heic')) {
+                        // Use heic2any to convert
+                        if (typeof heic2any !== 'undefined') {
+                            const jpegBlob = await heic2any({ blob: blob });
+                            return URL.createObjectURL(jpegBlob);
+                        }
+                    }
+                    
+                    // If not HEIC or conversion failed, use original
+                    return URL.createObjectURL(blob);
+                } catch (error) {
+                    console.error('Error converting image:', error);
+                    return filePath; // Fallback to original path
+                }
+            }
+            
+            // Load and display a photo
+            async function loadPhoto(index) {
+                currentPhotoIndex = index;
+                currentPhotoSpan.textContent = index + 1;
+                
+                // Update dots
+                document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+                
+                // Update buttons
+                prevBtn.disabled = index === 0;
+                nextPhotoBtn.disabled = index === photos.length - 1;
+                
+                // Load image
+                const photo = photos[index];
+                photocard.innerHTML = '<div class="loading"></div>';
+                
+                try {
+                    // Convert HEIC if needed
+                    let imageSrc = photo;
+                    if (photo.toLowerCase().endsWith('.heic')) {
+                        imageSrc = await convertHEICtoDataURL(photo);
+                    }
+                    
+                    const img = new Image();
+                    img.onload = function() {
+                        photocard.innerHTML = '';
+                        photocard.appendChild(img);
+                    };
+                    img.onerror = function() {
+                        photocard.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #888;">Unable to load image</div>';
+                    };
+                    img.src = imageSrc;
+                } catch (error) {
+                    console.error('Error loading photo:', error);
+                    photocard.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #888;">Error loading image</div>';
+                }
+            }
+            
+            // Navigate to specific photo
+            function goToPhoto(index) {
+                loadPhoto(index);
+            }
+            
+            // Navigate to next photo
+            function nextPhoto() {
+                if (currentPhotoIndex < photos.length - 1) {
+                    loadPhoto(currentPhotoIndex + 1);
+                }
+            }
+            
+            // Navigate to previous photo
+            function prevPhoto() {
+                if (currentPhotoIndex > 0) {
+                    loadPhoto(currentPhotoIndex - 1);
+                }
+            }
+            
+            // Gallery event listeners
+            nextPhotoBtn.addEventListener('click', nextPhoto);
+            prevBtn.addEventListener('click', prevPhoto);
+            
+            closeGallery.addEventListener('click', () => {
+                galleryContainer.classList.remove('show');
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (!galleryContainer.classList.contains('show')) return;
+                
+                if (e.key === 'ArrowLeft') prevPhoto();
+                if (e.key === 'ArrowRight') nextPhoto();
+                if (e.key === 'Escape') galleryContainer.classList.remove('show');
+            });
+            
+            // Initialize background music
+            function initBackgroundMusic() {
+                const audio = document.getElementById('backgroundMusic');
+                audio.volume = 0.3; // Set volume to 30%
+                
+                // Try to play music
+                const playPromise = audio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            // Music started playing
+                            console.log('Music started');
+                            showMusicIndicator();
+                        })
+                        .catch(error => {
+                            // Autoplay was prevented or failed
+                            console.log('Autoplay prevented, waiting for user interaction');
+                            // Try playing on user interaction
+                            document.addEventListener('click', function playOnClick() {
+                                audio.play();
+                                showMusicIndicator();
+                                document.removeEventListener('click', playOnClick);
+                            }, { once: true });
+                        });
+                }
+            }
+            
+            function showMusicIndicator() {
+                // Show music indicator
+                setTimeout(() => {
+                    musicIndicator.style.animation = 'fadeInUp 0.5s ease';
+                    musicIndicator.style.opacity = '1';
+                }, 1000);
+                
+                // Hide music indicator after 5 seconds
+                setTimeout(() => {
+                    musicIndicator.style.opacity = '0';
+                    musicIndicator.style.transition = 'opacity 1s ease';
+                }, 5000);
+            }
+            
+            // Typewriter effect
+            function typeWriter(text, element, speed = 30) {
+                element.innerHTML = '';
+                let i = 0;
+                
+                function type() {
+                    if (i < text.length) {
+                        // Add the next character
+                        element.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+                        i++;
+                        
+                        // Random speed variation for natural typing effect
+                        const randomSpeed = speed + Math.random() * 20;
+                        setTimeout(type, randomSpeed);
+                    } else {
+                        // Remove cursor when finished
+                        element.innerHTML = text;
+                        
+                        // Show next button after typing finishes
+                        setTimeout(() => {
+                            nextBtn.classList.add('show', 'delayed-show');
+                        }, 500);
+                    }
+                }
+                
+                type();
+            }
+            
+            // Show message with typewriter effect
+            showMessageBtn.addEventListener('click', function() {
+                if (hiddenMessageContainer.classList.contains('show')) {
+                    // Hide message
+                    hiddenMessageContainer.classList.remove('show');
+                    nextBtn.classList.remove('show', 'delayed-show');
+                    showMessageBtn.innerHTML = `
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7117 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0034 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92176 4.44061 8.37485 5.27072 7.03255C6.10083 5.69025 7.28825 4.60557 8.7 3.9C9.87812 3.30493 11.1801 2.99656 12.5 3H13C15.0843 3.11499 17.053 3.99476 18.5291 5.47086C20.0052 6.94696 20.885 8.91565 21 11V11.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Send a Hug`;
+                } else {
+                    // Show message with typewriter effect
+                    hiddenMessageContainer.classList.add('show');
+                    showMessageBtn.innerHTML = `
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Close Message`;
+                    
+                    // Start typewriter effect
+                    setTimeout(() => {
+                        typeWriter(fullMessage, hiddenMessage, 30);
+                    }, 300);
+                }
+            });
+            
+            // Next button event listener
+            nextBtn.addEventListener('click', function() {
+                loadPhotos();
+                loadPhoto(0);
+                galleryContainer.classList.add('show');
+            });
+            
+            // Copy message to clipboard
+            copyMessageBtn.addEventListener('click', async function() {
+                try {
+                    await navigator.clipboard.writeText(fullMessage);
+                    
+                    // Visual feedback
+                    const originalText = copyMessageBtn.innerHTML;
+                    copyMessageBtn.innerHTML = `
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Copied!`;
+                    
+                    setTimeout(() => {
+                        copyMessageBtn.innerHTML = originalText;
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+                    alert('Gagal menyalin pesan. Silakan salin secara manual.');
+                }
+            });
+            
+            // Initialize background music
+            initBackgroundMusic();
+            
+            // Fade in container
+            setTimeout(() => {
+                document.querySelector('.container').style.opacity = '1';
+                document.querySelector('.container').style.transform = 'translateY(0)';
+            }, 100);
+            
+            // Set initial styles for animation
+            document.querySelector('.container').style.opacity = '0';
+            document.querySelector('.container').style.transform = 'translateY(20px)';
+            document.querySelector('.container').style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        });
+    </script>
+    
+    <!-- HEIC to Blob converter library -->
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+</body>
+</html>
